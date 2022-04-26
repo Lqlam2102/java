@@ -8,6 +8,7 @@ package learnjava;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.sql.*;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -16,19 +17,48 @@ import javax.swing.DefaultListModel;
  */
 public class Menu extends javax.swing.JFrame {
     DefaultListModel<String> model;
-    
+    int index_current;
+    String ten_xe_current,so_xe_current;
     /**
      * Creates new form Menu
      */
     public Menu() {
         initComponents();
+        LoadCar();
+    }
+    public void LoadCar(){
         model = new DefaultListModel<>(){};
-        model.addElement("Rice");
-        model.addElement("Meat");
-        model.addElement("Noodle");
+        
+//        model.addElement("Rice");
+//        model.addElement("Meat");
+//        model.addElement("Noodle");
+//          model.addElement(tbProduct_name.getText());
+        String url = "jdbc:sqlserver://ADMIN\\SQLEXPRESS:1433;databaseName=java_base_connect;encrypt=true;trustServerCertificate=true;";
+        String user = "sa";
+        String pass = "admin";
+        try {
+            Connection con = DriverManager.getConnection(url, user, pass);
+            Statement stmt = con.createStatement();
+            String sql = "SELECT * FROM ql_xe";
+            ResultSet rs = stmt.executeQuery(sql);
+//            int c = stmt.executeUpdate(sql);
+            while (rs.next()) {                
+                model.addElement(rs.getString("ten_xe"));
+            }
+//            if(rs.next()){
+//                lb_stt.setText("Them thanh cong");
+//            }
+//            else{
+//                lb_stt.setText("Them That bai");
+//            }
+            //rs.close();
+            stmt.close();
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         jList1.setModel(model);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,6 +81,11 @@ public class Menu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lb_stt = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        tbSeri = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -105,11 +140,6 @@ public class Menu extends javax.swing.JFrame {
 
         jPanel1.setToolTipText("");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Rice", "Meat", "Noodle" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jList1.setToolTipText("");
         jList1.setName(""); // NOI18N
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -131,7 +161,30 @@ public class Menu extends javax.swing.JFrame {
 
         lb_stt.setText("Connect To SQL Server");
 
-        jButton3.setText("jButton3");
+        jButton3.setText("Show all");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Seri");
+
+        jLabel3.setText("Mau xe dang co");
+
+        jButton5.setText("Edit");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Delete");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -139,22 +192,31 @@ public class Menu extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
                     .addComponent(jButton3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
-                            .addComponent(tbProduct_name, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1)
-                            .addComponent(lb_stt))))
-                .addContainerGap(331, Short.MAX_VALUE))
+                            .addComponent(lb_stt)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton5))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tbSeri)
+                            .addComponent(tbProduct_name)
+                            .addComponent(jButton6))))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -162,12 +224,20 @@ public class Menu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tbProduct_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(jLabel2)
+                        .addGap(2, 2, 2)
+                        .addComponent(tbSeri, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(jButton5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lb_stt)))
+                        .addComponent(jButton6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3)
-                .addGap(37, 37, 37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lb_stt)
+                .addGap(13, 13, 13))
         );
 
         jMenu1.setText("File");
@@ -290,34 +360,80 @@ public class Menu extends javax.swing.JFrame {
 //        model = new DefaultListModel<>();
         
 //        model.addElement(tbProduct_name.getText());
-          model.addElement(tbProduct_name.getText());
+//          model.addElement(tbProduct_name.getText());
+        String url = "jdbc:sqlserver://ADMIN\\SQLEXPRESS:1433;databaseName=java_base_connect;encrypt=true;trustServerCertificate=true;";
+        String user = "sa";
+        String pass = "admin";
+        int i = 0;
+        if (tbProduct_name.getText().trim().isBlank()||tbSeri.getText().trim().isBlank()){
+            JOptionPane.showMessageDialog(this, "Khong duoc de trong thong tin!");
+        }
+        else{
+            try {
+            Connection con = DriverManager.getConnection(url, user, pass);
+            Statement stmt = con.createStatement();
+            String sql = ("INSERT INTO ql_xe VALUES(N'"+tbProduct_name.getText().trim()+"','"+tbSeri.getText().trim()+"')");
+            String sql_check = "SELECT * FROM ql_xe";
+            ResultSet rs = stmt.executeQuery(sql_check);
+            while (rs.next()) {                
+                if (tbProduct_name.getText().trim().equals(rs.getString("ten_xe")) || tbSeri.getText().trim().equals(rs.getString("so_xe"))){
+                    JOptionPane.showMessageDialog(this, "Mau xe da ton tai!");
+                    i++;
+                    rs.close();
+                    break;
+                }
+            }
+            
+//            int c = stmt.executeUpdate(sql);
+            if(i==0){
+                int c = stmt.executeUpdate(sql);
+                if(c>0){
+
+                lb_stt.setText("Them thanh cong");
+                model.addElement(tbProduct_name.getText().trim());
+                }
+                else{
+                lb_stt.setText("Them That bai");
+                }
+            }
+
+            //rs.close();
+            stmt.close();
+            con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+    //            JOptionPane.showMessageDialog(this, "messbox error");
+            }
+        }
+        
+          
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+        // TODO add your handling code here:
+        ten_xe_current = jList1.getSelectedValue();
+        tbProduct_name.setText(ten_xe_current);
+        
+//        jList1.getSelectedValue()
         String url = "jdbc:sqlserver://ADMIN\\SQLEXPRESS:1433;databaseName=java_base_connect;encrypt=true;trustServerCertificate=true;";
         String user = "sa";
         String pass = "admin";
         try {
             Connection con = DriverManager.getConnection(url, user, pass);
             Statement stmt = con.createStatement();
-            String sql = "DROP TABLE t2";
-            //ResultSet rs = stmt.executeQuery(sql);
-            int c = stmt.executeUpdate(sql);
-            if(c>0){
-                lb_stt.setText("aa");
+            String sql = "SELECT so_xe FROM ql_xe WHERE ten_xe = N'"+jList1.getSelectedValue()+"'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                so_xe_current= rs.getString("so_xe").trim();
+                tbSeri.setText(so_xe_current);
+                stmt.close();
+                con.close();
             }
-            else{
-                lb_stt.setText("bb");
-            }
-            //rs.close();
-            stmt.close();
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-          
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        // TODO add your handling code here:
-        tbProduct_name.setText(jList1.getSelectedValue());
+       
+        index_current = jList1.getSelectedIndex();
     }//GEN-LAST:event_jList1ValueChanged
 
     private void jButton4jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4jMenuItem1ActionPerformed
@@ -337,6 +453,78 @@ public class Menu extends javax.swing.JFrame {
         Java_GiuaKy help = new Java_GiuaKy();
         help.setVisible(true);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        String url = "jdbc:sqlserver://ADMIN\\SQLEXPRESS:1433;databaseName=java_base_connect;encrypt=true;trustServerCertificate=true;";
+        String user = "sa";
+        String pass = "admin";
+        int i = 0;
+        try {
+            Connection con = DriverManager.getConnection(url, user, pass);
+            Statement stmt = con.createStatement();
+            if (tbProduct_name.getText().isBlank()){
+                JOptionPane.showMessageDialog(this, "Ban phai chon 1 mau xe");
+            }
+            else{
+                String sql = "DELETE FROM ql_xe WHERE ten_xe = N'"+tbProduct_name.getText()+"'";
+                int c = stmt.executeUpdate(sql);
+                if(c>0){
+                    lb_stt.setText("Xoa thanh cong");
+                    model.removeElementAt(index_current);
+                }
+                else{
+                    lb_stt.setText("Xoa That bai");
+                }
+                //rs.close();
+                stmt.close();
+                con.close();
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "messbox error");
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String url = "jdbc:sqlserver://ADMIN\\SQLEXPRESS:1433;databaseName=java_base_connect;encrypt=true;trustServerCertificate=true;";
+        String user = "sa";
+        String pass = "admin";
+        int i = 0;
+        try {
+            Connection con = DriverManager.getConnection(url, user, pass);
+            Statement stmt = con.createStatement();
+            if (tbProduct_name.getText().isBlank()){
+                JOptionPane.showMessageDialog(this, "Ban phai chon 1 mau xe");
+            }
+            else{
+                String sql = "update ql_xe set ten_xe = N'"+tbProduct_name.getText()+"' , so_xe = '"+
+                tbSeri.getText()+"' where ten_xe = N'"+ten_xe_current+"'";
+                int c = stmt.executeUpdate(sql);
+                if(c>0){
+                    lb_stt.setText("Doi thanh cong");
+                    LoadCar();
+                }
+                else{
+                    lb_stt.setText("Thay doi That bai");
+                }
+                //rs.close();
+                stmt.close();
+                con.close();
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "messbox error");
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        LoadCar();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -410,7 +598,11 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -439,5 +631,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lb_stt;
     private javax.swing.JTextField tbProduct_name;
+    private javax.swing.JTextField tbSeri;
     // End of variables declaration//GEN-END:variables
 }
