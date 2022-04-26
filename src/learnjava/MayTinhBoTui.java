@@ -15,12 +15,12 @@ public class MayTinhBoTui extends javax.swing.JFrame {
     String tb ="";
     int value1 = 0;
     String command ="";
+    public Color colorbg = new Color();
     /**
      * Creates new form MayTinhBoTui
      */
     public MayTinhBoTui() {
         initComponents();
-        
     }
 
     /**
@@ -398,8 +398,8 @@ public class MayTinhBoTui extends javax.swing.JFrame {
     private javax.swing.JButton btSqrt;
     private javax.swing.JButton btTru;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    public javax.swing.JPanel jPanel1;
+    public javax.swing.JPanel jPanel2;
     private javax.swing.JTextField tbHienThi;
     // End of variables declaration//GEN-END:variables
 }
